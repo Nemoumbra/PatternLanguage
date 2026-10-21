@@ -208,7 +208,14 @@ namespace pl::core {
     }
 
     void ScopeValidator::visit(ast::ASTNodeCompoundStatement &node) {
+        // Follow the parser's hint.
+        if (!node.m_newScope) {
+            visitTypeErasedNodes(node.getStatements());
+            return;
+        }
+        pushScope();
         visitTypeErasedNodes(node.getStatements());
+        popScope();
     }
 
     void ScopeValidator::visit(ast::ASTNodeWhileStatement &node) {
